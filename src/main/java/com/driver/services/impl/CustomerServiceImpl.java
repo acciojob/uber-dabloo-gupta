@@ -63,7 +63,8 @@ public class CustomerServiceImpl implements CustomerService {
 		tripBooking.setCustomer(customer);
 		tripBooking.setFromLocation(fromLocation);
 		tripBooking.setToLocation(toLocation);
-		tripBooking.setBill(10 * distanceInKm);
+		tripBooking.setDistanceInKm(distanceInKm);
+		tripBooking.setBill(bookedriver.getCab().getPerKmRate() * distanceInKm);
 		tripBooking.setStatus(TripStatus.CONFIRMED);
 		tripBooking.setDriver(bookedriver);
 
@@ -73,7 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
 		driverRepository2.save(bookedriver);
 
 		customerRepository2.save(customer);
-		tripBookingRepository2.save(tripBooking);
+		//tripBookingRepository.save(tripBooking); ab iski zrorat nhi hai as this is the child.
 		return tripBooking;
 
 
@@ -95,6 +96,7 @@ public class CustomerServiceImpl implements CustomerService {
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
 		tripBooking.setStatus(TripStatus.COMPLETED);
+//		tripBooking.setBill(tripBooking.getDriver().getCab().getPerKmRate() * );
 		tripBooking.getDriver().getCab().setAvailable(true);
 		tripBookingRepository2.save(tripBooking);
 
