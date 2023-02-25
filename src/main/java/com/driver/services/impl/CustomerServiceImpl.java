@@ -50,10 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
 		Driver bookedriver = null;
 		for(Driver driver : drivers){
 			if(driver.getCab().isAvailable()){
-				if(bookedriver == null){
-					bookedriver = driver;
-				}
-				if(bookedriver.getDriverId()> driver.getDriverId()){
+				if(bookedriver == null || bookedriver.getDriverId() > driver.getDriverId()){
 					bookedriver = driver;
 				}
 			}
@@ -66,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
 		tripBooking.setCustomer(customer);
 		tripBooking.setFromLocation(fromLocation);
 		tripBooking.setToLocation(toLocation);
-		tripBooking.setBill(bookedriver.getCab().getPerKmRate()*distanceInKm);
+		tripBooking.setBill(bookedriver.getCab().getPerKmRate() * distanceInKm);
 		tripBooking.setStatus(TripStatus.CONFIRMED);
 		tripBooking.setDriver(bookedriver);
 
@@ -74,9 +71,10 @@ public class CustomerServiceImpl implements CustomerService {
 		customer.getTripBookingList().add(tripBooking);
 
 		driverRepository2.save(bookedriver);
-		tripBookingRepository2.save(tripBooking);
+
 		customerRepository2.save(customer);
-		 return tripBooking;
+		tripBookingRepository2.save(tripBooking);
+		return tripBooking;
 
 
 	}
